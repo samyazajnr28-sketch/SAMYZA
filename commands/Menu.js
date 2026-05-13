@@ -127,15 +127,21 @@ export const commands = [
             menuText += `│╰────────────\n`
             menuText += `╰══════════════⊷\n\n`
         }
-        await sock.sendMessage(from, { 
-            text: menuText,
-            contextInfo: {
-                forwardingScore: 1,
-                isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363238139244263@newsletter',
-                    newsletterName: botName,
-                    serverMessageId: -1
+                    // Build the menuText first, then send it as an image caption
+            await sock.sendMessage(from, {
+                image: { url: 'https://github.com/user-attachments/assets/84bb5e1e-abbd-4c2c-a22d-32c7df714585' }, 
+                caption: menuText,
+                contextInfo: {
+                    forwardingScore: 1,
+                    isForwarded: true,
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: '120363238139244238@newsletter',
+                        newsletterName: botName,
+                        serverMessageId: -1
+                    }
+                }
+            }, { quoted: msg })
+
                 }
             }
         }, { quoted: msg })
