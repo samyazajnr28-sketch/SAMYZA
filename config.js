@@ -39,7 +39,7 @@ const CONFIG = {
   OWNER_NUMBER: process.env.OWNER_NUMBER || '254715182153',
   OWNER_NAME: process.env.OWNER_NAME || 'SAMYAZA',
   BOT_NAME: process.env.BOT_NAME || 'SAMYAZA-MD-V3',
-  IMAGE_URL: process.env.IMAGE_URL || 'https://github.com/user-attachments/assets/84bb5e1e-abbd-4c2c-a22d-32c7df714585',
+  IMAGE_URL: process.env.IMAGE_URL || 'https://github.com/user-attachments/assets/84bb5e1e-abbd-4c2c-a22d-32c7df714585" width="800" alt="Samyaza Logo' ,
   BOT_VERSION: process.env.BOT_VERSION || '3.0.0'
 }
 
