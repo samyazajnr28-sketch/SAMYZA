@@ -1,114 +1,119 @@
-/**
- * SAMYAZA-MD-V3 
- * Full Code Reconstruction from 1778681114607.jpeg
- */
+const {
+    smd,
+    prefix,
+    Config,
+    getData,
+    decodeJid,
+    getAdmin,
+    tlang,
+    runtime,
+    formatp
+} = require('../lib');
 
-const { 
-    BufferJSON, 
-    WA_DEFAULT_EPHEMERAL, 
-    generateWAMessageFromContent, 
-    proto, 
-    generateWAMessageContent, 
-    generateWAMessage, 
-    prepareWAMessageMedia, 
-    areJidsSameUser, 
-    getContentType 
-} = require('@whiskeysockets/baileys');
-
-const fs = require('fs');
-const util = require('util');
-const chalk = require('chalk');
-const speed = require('performance-now');
-const { smsg, formatp, tanggal, formatDate, getTime, sleep, runtime, fetchJson, getBuffer, jsonformat, delay } = require('./lib/myfunc');
-
-module.exports = samyaza = async (conn, m, chatUpdate, store) => {
+smd({
+    pattern: "menu",
+    desc: "To display Samyaza Md main menu",
+    category: "general",
+    filename: __filename
+}, async (m, text, { conn }) => {
     try {
-        var body = (m.mtype === 'conversation') ? m.message.conversation : (m.mtype == 'imageMessage') ? m.message.imageMessage.caption : (m.mtype == 'videoMessage') ? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage') ? m.message.templateButtonReplyMessage.selectedId : (m.mtype === 'messageContextInfo') ? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : '';
-        var budy = (typeof m.text == 'string' ? m.text : '');
-        var prefix = /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/)[0] : '';
-        const isCmd = body.startsWith(prefix);
-        const command = isCmd ? body.slice(prefix.length).trim().split(/ +/).shift().toLowerCase() : '';
-        const args = body.trim().split(/ +/).slice(1);
-        const pushname = m.pushName || "No Name";
-        const text = q = args.join(" ");
-        const fatkuns = (m.quoted || m);
-        const quoted = (fatkuns.mtype == 'buttonsMessage') ? fatkuns[Object.keys(fatkuns)[1]] : (fatkuns.mtype == 'templateMessage') ? fatkuns.hydratedTemplate[Object.keys(fatkuns.hydratedTemplate)[1]] : (fatkuns.mtype == 'productMessage') ? fatkuns.productMessage[Object.keys(fatkuns.productMessage)[0]] : m.quoted ? m.quoted : m;
-        const mime = (quoted.msg || quoted).mimetype || '';
-        const qmsg = (quoted.msg || quoted);
+        let { name } = await conn.getName(m.sender);
+        let date = new Date().toLocaleDateString('en-GB');
+        let time = new Date().toLocaleTimeString('en-GB');
+        let _runtime = runtime();
+        
+        let menuText = `
+*Hello, ${name}!*
 
-        // Configuration for AdReply 
-        const samyazaContext = {
-            externalAdReply: {
-                title: "SAMYAZA-MD-V3",
-                body: "The Ultimate WhatsApp Automaton",
-                thumbnailUrl: 'https://github.com/user-attachments/assets/84bb5e1e-abbd-4c2c-a22d-32c7df714585',
-                sourceUrl: "https://github.com/samyazajnr28-sketch/SAMYAZA-MD",
-                mediaType: 1,
-                renderLargerThumbnail: true
-            }
-        };
+*–––『 SAMYAZA MD 』–––*
+*👑 Owner:* ${Config.ownername}
+*📅 Date:* ${date}
+*🕒 Time:* ${time}
+*⌛ Runtime:* ${_runtime}
+*💾 Mode:* ${Config.WORKTYPE}
+*⚡ Speed:* 1.2s
 
-        switch (command) {
+*--- COMMANDS LIST ---*
+*『 GENERAL 』*
+* ${prefix}menu
+* ${prefix}owner
+* ${prefix}runtime
+* ${prefix}speed
 
-            case 'menu':
-            case 'help': {
-                let menuText = `*SAMYAZA-MD-V3* 🤖\n\n` +
-                               `*User:* ${pushname}\n` +
-                               `*Library:* Baileys\n` +
-                               `*Runtime:* ${runtime(process.uptime())}\n\n` +
-                               `*MAIN COMMANDS*\n` +
-                               `• ${prefix}ping\n` +
-                               `• ${prefix}owner\n` +
-                               `• ${prefix}runtime\n` +
-                               `• ${prefix}speed`;
+*『 DOWNLOAD 』*
+* ${prefix}ytmp3
+* ${prefix}ytmp4
+* ${prefix}facebook
+* ${prefix}instagram
 
-                await conn.sendMessage(m.chat, { 
-                    image: { url: 'https://github.com/user-attachments/assets/84bb5e1e-abbd-4c2c-a22d-32c7df714585' }, 
-                    caption: menuText,
-                    contextInfo: samyazaContext
-                }, { quoted: m });
-            }
-            break;
+*『 GROUP 』*
+* ${prefix}add
+* ${prefix}kick
+* ${prefix}promote
+* ${prefix}demote
 
-            case 'ping':
-            case 'speed': {
-                const timestamp = speed();
-                const latensi = speed() - timestamp;
-                await conn.sendMessage(m.chat, { 
-                    text: `*Speed:* ${latensi.toFixed(4)} ms`,
-                    contextInfo: samyazaContext
-                }, { quoted: m });
-            }
-            break;
+*『 TOOLS 』*
+* ${prefix}sticker
+* ${prefix}qc
+* ${prefix}translate
+* ${prefix}trt
 
-            case 'runtime': {
-                await conn.sendMessage(m.chat, { 
-                    text: `*UpTime:* ${runtime(process.uptime())}`,
-                    contextInfo: samyazaContext
-                }, { quoted: m });
-            }
-            break;
+*『 OWNER 』*
+* ${prefix}eval
+* ${prefix}shell
+* ${prefix}restart
 
-            case 'owner': {
-                const vcard = 'BEGIN:VCARD\n' + 'VERSION:3.0\n' + 'FN:Samyaza Jnr\n' + 'ORG:Samyaza MD;\n' + 'TEL;type=CELL;type=VOICE;waid=1234567890:+1234567890\n' + 'END:VCARD';
-                await conn.sendMessage(m.chat, { contacts: { displayName: 'Samyaza Jnr', contacts: [{ vcard }] } }, { quoted: m });
-            }
-            break;
+> Use ${prefix}help <command> for details.
+        `.trim();
 
-            default:
-                if (isCmd && body) {
-                    console.log(chalk.redBright('[ERROR]'), chalk.white(`Unknown Command: ${command}`));
+        await conn.sendMessage(m.chat, { 
+            image: { url: 'https://github.com/user-attachments/assets/84bb5e1e-abbd-4c2c-a22d-32c7df714585' }, 
+            caption: menuText,
+            contextInfo: {
+                externalAdReply: {
+                    title: "SAMYAZA-MD-V3",
+                    body: "The Ultimate WhatsApp Automaton",
+                    thumbnailUrl: 'https://github.com/user-attachments/assets/84bb5e1e-abbd-4c2c-a22d-32c7df714585',
+                    sourceUrl: "https://github.com/samyazajnr28-sketch/SAMYAZA-MD",
+                    mediaType: 1,
+                    renderLargerThumbnail: true
                 }
-        }
-    } catch (err) {
-        console.log(util.format(err));
-    }
-};
+            }
+        }, { quoted: m });
 
-let file = require.resolve(__filename);
-fs.watchFile(file, () => {
-    fs.unwatchFile(file);
-    console.log(chalk.redBright(`Update ${__filename}`));
-    delete require.cache[file];
-    require(file);
+    } catch (e) {
+        m.error(`${e}\n\nCommand: menu`, e);
+    }
 });
+
+smd({
+    pattern: "owner",
+    desc: "To check Samyaza Md owner info",
+    category: "general",
+    filename: __filename
+}, async (m, text, { conn }) => {
+    const ownerVcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${Config.ownername}\nORG:Samyaza Md;\nTEL;type=CELL;type=VOICE;waid=${Config.owner.split(',')[0]}:+${Config.owner.split(',')[0]}\nEND:VCARD`;
+    await conn.sendMessage(m.chat, { contacts: { displayName: Config.ownername, contacts: [{ vcard: ownerVcard }] } }, { quoted: m });
+});
+
+smd({
+    pattern: "runtime",
+    desc: "To check Samyaza Md runtime",
+    category: "general",
+    filename: __filename
+}, async (m, text, { conn }) => {
+    m.reply(`*SAMYAZA-MD RUNTIME:* ${runtime()}`);
+});
+
+smd({
+    pattern: "speed",
+    desc: "To check Samyaza Md ping",
+    category: "general",
+    filename: __filename
+}, async (m, text, { conn }) => {
+    const start = new Date().getTime();
+    const { key } = await m.reply('*Testing Ping...*');
+    const end = new Date().getTime();
+    await conn.sendMessage(m.chat, { text: `*SAMYAZA-MD PING:* ${end - start}ms`, edit: key });
+});
+
