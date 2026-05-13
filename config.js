@@ -36,7 +36,7 @@ const CONFIG = {
   DM_PRESENCE: process.env.DM_PRESENCE || 'True',
   GRP_PRESENCE: process.env.GRP_PRESENCE || 'True',
   USER_LID: parseLids(process.env.USER_LID || '61577013289053'),
-  OWNER_NUMBER: process.env.OWNER_NUMBER || '254706610185',
+  OWNER_NUMBER: process.env.OWNER_NUMBER || '254715182153',
   OWNER_NAME: process.env.OWNER_NAME || 'SAMYAZA',
   BOT_NAME: process.env.BOT_NAME || 'SAMYAZA-MD-V3',
   BOT_VERSION: process.env.BOT_VERSION || '3.0.0'
