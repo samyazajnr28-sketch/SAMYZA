@@ -4,7 +4,7 @@ import {
     Config,
     runtime,
     formatp
-} from '../lib/smd.js'; 
+} from '../lib/index.js';
 import os from 'os';
 
 smd({
@@ -59,6 +59,6 @@ smd({
         }, { quoted: m });
 
     } catch (e) {
-        console.error("Error in Samyaza menu:", e);
+        console.error("Build Error Debug:", e);
     }
 });
