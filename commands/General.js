@@ -4,7 +4,7 @@ import {
     Config,
     runtime,
     formatp
-} from '../lib/index.js';
+} from '../lib/smd.js'; 
 import os from 'os';
 
 smd({
@@ -41,7 +41,6 @@ smd({
 ╰━━━━━━━━━━━━━┈
 `.trim();
 
-        // This structure ensures the image from 54344.png is displayed
         await conn.sendMessage(m.chat, { 
             image: { url: 'https://github.com/user-attachments/assets/84bb5e1e-abbd-4c2c-a22d-32c7df714585' }, 
             caption: menuText,
@@ -60,7 +59,6 @@ smd({
         }, { quoted: m });
 
     } catch (e) {
-        console.error("Error in Samyaza Md menu:", e);
+        console.error("Error in Samyaza menu:", e);
     }
 });
-
