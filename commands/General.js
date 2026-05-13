@@ -1,78 +1,56 @@
-const {
+import {
     smd,
     prefix,
     Config,
-    getData,
-    decodeJid,
-    getAdmin,
-    tlang,
     runtime,
     formatp
-} = require('../lib');
+} from '../lib/index.js';
+import os from 'os';
 
 smd({
     pattern: "menu",
     desc: "To display Samyaza Md main menu",
     category: "general",
-    filename: __filename
+    filename: "General.js"
 }, async (m, text, { conn }) => {
     try {
         let { name } = await conn.getName(m.sender);
-        let date = new Date().toLocaleDateString('en-GB');
-        let time = new Date().toLocaleTimeString('en-GB');
-        let _runtime = runtime();
-        
+        let uptime = runtime();
+        let totalMem = formatp(os.totalmem());
+        let freeMem = formatp(os.freemem());
+
         let menuText = `
-*Hello, ${name}!*
+╭━━〔 SAMYAZA-MD-V3 3.0.0 〕━━┈
+┃ 🧩 Commands: 159
+┃ 🌟 Prefix: ${prefix}
+┃ 🕒 Time: ${new Date().toLocaleTimeString()}
+┃ 🌍 Timezone: Kenya/Kisumu
+┃ 📅 Date: 13/05/2026
+┃ ⏳ Uptime: ${uptime}
+┃ 💾 RAM: ${freeMem}/${totalMem}
+┃ 👑 Owner: SAMYAZA
+╰━━━━━━〔 VERSION 3.0.0 〕━━━┈
 
-*–––『 SAMYAZA MD 』–––*
-*👑 Owner:* ${Config.ownername}
-*📅 Date:* ${date}
-*🕒 Time:* ${time}
-*⌛ Runtime:* ${_runtime}
-*💾 Mode:* ${Config.WORKTYPE}
-*⚡ Speed:* 1.2s
+╭━━〔 AI 〕━━┈
+┃ 1. DEEPSEEK
+┃ 2. GEMINI
+┃ 3. GPT
+┃ 4. IMAGINE
+┃ 5. LLAMA
+┃ 6. VISION
+╰━━━━━━━━━━━━━┈
+`.trim();
 
-*--- COMMANDS LIST ---*
-*『 GENERAL 』*
-* ${prefix}menu
-* ${prefix}owner
-* ${prefix}runtime
-* ${prefix}speed
-
-*『 DOWNLOAD 』*
-* ${prefix}ytmp3
-* ${prefix}ytmp4
-* ${prefix}facebook
-* ${prefix}instagram
-
-*『 GROUP 』*
-* ${prefix}add
-* ${prefix}kick
-* ${prefix}promote
-* ${prefix}demote
-
-*『 TOOLS 』*
-* ${prefix}sticker
-* ${prefix}qc
-* ${prefix}translate
-* ${prefix}trt
-
-*『 OWNER 』*
-* ${prefix}eval
-* ${prefix}shell
-* ${prefix}restart
-
-> Use ${prefix}help <command> for details.
-        `.trim();
-
+        // This structure ensures the image from 54344.png is displayed
         await conn.sendMessage(m.chat, { 
             image: { url: 'https://github.com/user-attachments/assets/84bb5e1e-abbd-4c2c-a22d-32c7df714585' }, 
             caption: menuText,
             contextInfo: {
+                forwardingScore: 999,
+                isForwarded: true,
                 externalAdReply: {
                     title: "SAMYAZA-MD-V3",
-                    body: "The Ultimate WhatsApp Automaton",
+                    body: "The Fallen Angel Automaton",
                     thumbnailUrl: 'https://github.com/user-attachments/assets/84bb5e1e-abbd-4c2c-a22d-32c7df714585',
                     sourceUrl: "https://github.com/samyazajnr28-sketch/SAMYAZA-MD",
                     mediaType: 1,
@@ -82,38 +60,7 @@ smd({
         }, { quoted: m });
 
     } catch (e) {
-        m.error(`${e}\n\nCommand: menu`, e);
+        console.error("Error in Samyaza Md menu:", e);
     }
-});
-
-smd({
-    pattern: "owner",
-    desc: "To check Samyaza Md owner info",
-    category: "general",
-    filename: __filename
-}, async (m, text, { conn }) => {
-    const ownerVcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${Config.ownername}\nORG:Samyaza Md;\nTEL;type=CELL;type=VOICE;waid=${Config.owner.split(',')[0]}:+${Config.owner.split(',')[0]}\nEND:VCARD`;
-    await conn.sendMessage(m.chat, { contacts: { displayName: Config.ownername, contacts: [{ vcard: ownerVcard }] } }, { quoted: m });
-});
-
-smd({
-    pattern: "runtime",
-    desc: "To check Samyaza Md runtime",
-    category: "general",
-    filename: __filename
-}, async (m, text, { conn }) => {
-    m.reply(`*SAMYAZA-MD RUNTIME:* ${runtime()}`);
-});
-
-smd({
-    pattern: "speed",
-    desc: "To check Samyaza Md ping",
-    category: "general",
-    filename: __filename
-}, async (m, text, { conn }) => {
-    const start = new Date().getTime();
-    const { key } = await m.reply('*Testing Ping...*');
-    const end = new Date().getTime();
-    await conn.sendMessage(m.chat, { text: `*SAMYAZA-MD PING:* ${end - start}ms`, edit: key });
 });
 
