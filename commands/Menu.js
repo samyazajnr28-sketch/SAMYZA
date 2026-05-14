@@ -138,10 +138,6 @@ export const commands = [
                         newsletterJid: '120363238139244238@newsletter',
                         newsletterName: botName,
                         serverMessageId: -1
-                    }
-                }
-            }, { quoted: msg })
-
                 }
             }
         }, { quoted: msg })
